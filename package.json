@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "start":"beefy src/test.js:boundle.js 8080 -cwd public --live"
+    "start":"beefy src/test.js:bundle.js 8080 --cwd public --live"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "vox"
   ],
   "author": "zuzu",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/zuzu2005/voxel/issues"
   },
