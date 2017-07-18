@@ -1,0 +1,31 @@
+{
+  "name": "voxeljs",
+  "version": "1.0.0",
+  "description": "用来载入.vox并渲染的库",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "start":"beefy src/test.js:boundle.js 8080 -cwd public --live"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zuzu2005/voxel.git"
+  },
+  "keywords": [
+    "voxel",
+    "vox"
+  ],
+  "author": "zuzu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zuzu2005/voxel/issues"
+  },
+  "homepage": "https://github.com/zuzu2005/voxel#readme",
+  "devDependencies": {
+    "beefy": "^2.1.8",
+    "browserify": "^14.4.0"
+  },
+  "dependencies": {
+    "three": "^0.86.0"
+  }
+}
