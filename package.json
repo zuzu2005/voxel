@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "start":"beefy src/test.js:bundle.js 8080 --cwd public --live"
+    "start": "beefy src/test.js:bundle.js 3000 --cwd public --live"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,8 @@
     "browserify": "^14.4.0"
   },
   "dependencies": {
+    "interact": "0.0.3",
+    "kb-controls": "^0.2.0",
     "three": "^0.86.0"
   }
 }
