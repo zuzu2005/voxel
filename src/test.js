@@ -1,7 +1,7 @@
 var Game = require("./game");
 var kb = require("kb-controls");
 
-var game = new Game();
+var game = new Game({enableStats:true});
 
 var cube;
 game.on('init',function(){

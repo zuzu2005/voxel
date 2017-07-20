@@ -38,6 +38,11 @@ function Game(opts){
     }
     this.camera = new THREE.PerspectiveCamera( 75, width / height, 0.1, 1000 );
     this.setSize(width,height);
+    //这里加入帧率检测
+    if(this.opts.enableStats){
+        this.stats = new Stats();
+        document.body.appendChild( this.stats.dom );
+    }
 }
 
 inherits(Game,EventEmitter);
@@ -70,6 +75,7 @@ Game.prototype.run=function(){
     var t = Date.now()-1;
     var animate = function(){
         requestAnimationFrame( animate );
+        if(this.stats)this.stats.update();
         var nt = Date.now();
         if(!this.paused){
             this.emit('update',nt - t);
