@@ -47,7 +47,10 @@ game.on('init',function(){
         '<space>':'jump',
         '<mouse 1>': 'fire'});
     var gui = new dat.GUI();
-    gui.add(cube.position,'x',-10,10);
+    var camera = gui.addFolder("camera");
+    camera.add(this.camera.rotation,'x',-10,10).step(0.1);
+    camera.add(this.camera.rotation,'y',-10,10).step(0.1);
+    camera.add(this.camera.rotation,'z',-10,10).step(0.1);
     console.log('run...');
 });
 
