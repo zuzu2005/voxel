@@ -3,7 +3,7 @@
  */
 var EventEmitter = require("events");
 var inherits = require("inherits");
-var Overlooking = require("./overlooking");
+var Observer = require("./observer");
 
 module.exports = Game;
 
@@ -64,13 +64,32 @@ Game.prototype.setSize = function(w,h){
 Game.prototype.run=function(){
     this.emit('init');
     //如果用户没提供控制镜头的对象，这里创建默认的
-    if(!this.control){
-        this.control = new Overlooking(this);
+    if(!this.observer){
+        //this.observer = new Observer(this);        
     }
+    var t = Date.now()-1;
     var animate = function(){
         requestAnimationFrame( animate );
-        this.emit('update');
-        this.renderer.render( this.scene, this.camera );
+        var nt = Date.now();
+        if(!this.paused){
+            this.emit('update',nt - t);
+            this.renderer.render( this.scene, this.camera );
+        }
+        t = nt;
     }.bind(this);
     animate();    
 };
+
+/**
+ * 暂停主循环
+ */
+Game.prototype.pause=function(){
+    this.paused = true;
+}
+
+/**
+ * 恢复主循环
+ */
+Game.prototype.resume=function(){
+    this.paused = false;
+}

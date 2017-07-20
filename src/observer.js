@@ -4,7 +4,8 @@
  */
 var kb = require("kb-controls");
 var interact = require("interact");
-var Stream = require('stream').Stream;
+var control = require("./control");
+var physical = require("./physical");
 
 module.exports = Observer;
 
@@ -17,21 +18,25 @@ function Observer(game){
         '<up>': 'forward',
         '<down>': 'backward',
         'W': 'forward',
-        'A': 'strafe_left',
+        'A': 'left',
         'S': 'backward',
-        'D': 'strafe_right',
+        'D': 'right',
+        '<space>':'jump',
         '<mouse 1>': 'fire'});
     this.interact = interact( game.renderer.domElement )
     .on('attain',this.onControlChange.bind(this,true))
     .on('release',this.onControlChange.bind(this,false))
     .on('release',this.onControlChange.bind(this));
-
+    this.controls = control(this.kb,{seep:0});
+    var obj = physical(game.camera,[]);
+    game.on('update',dt=>obj.tick(dt));
+    this.controls.target(obj);
     /**
      * 根据当前状态更新摄像机
      */
-    game.on('update',function(){
-
-    });
+    game.on('update',(function(dt){
+        this.controls.tick(dt);
+    }).bind(this));
 }
 
 Observer.prototype.onControlChange = function(gained,stream){
@@ -40,24 +45,9 @@ Observer.prototype.onControlChange = function(gained,stream){
         return;
     }
     this.kb.enable();
-    stream.pipe(this.createControlStream());
+    stream.pipe(this.controls.createWriteRotationStream());
 }
 
 Observer.prototype.onControlOptOut = function() {
   this.optout = true
-}
-
-/**
- * 创建一个写入流，用来控制摄像镜头
- */
-Observer.prototype.createControlStream = function(){
-    var stream = new Stream();
-    stream.writable = true;
-    stream.write = function(changes){
-        console.log(changes);
-    };
-    stream.end = function(deltas){
-        //鼠标切除
-    };
-    return stream;
 }
