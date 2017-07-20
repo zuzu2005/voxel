@@ -13,6 +13,7 @@ module.exports = Game;
  * canvas : 使用给定的节点
  * width,height : 固定的宽高，如果不提供
  * maxFrameSize : 最大的帧尺寸，帧尺寸指的是渲染真的尺寸，过大的尺寸导致低帧率
+ * enableStats  : 打开帧率检测小窗口
  */
 function Game(opts){
     this.opts = opts || {};

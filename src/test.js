@@ -6,13 +6,31 @@ var game = new Game({enableStats:true});
 var cube;
 game.on('init',function(){
     var geometry = new THREE.BoxGeometry( 10, 10, 1 );
-    var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
     cube = new THREE.Mesh( geometry, material );
     this.scene.add( cube );
 
+    var mesh = new THREE.Mesh(
+        new THREE.SphereBufferGeometry( 50, 16, 8 ),
+        new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe: true } )
+    );
+    this.scene.add( mesh );
+    var mesh2 = new THREE.Mesh(
+        new THREE.SphereBufferGeometry( 10, 32, 16 ),
+        new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } )
+    );
+    mesh2.position.y = 150;
+    mesh.add( mesh2 );/*
+    var mesh3 = new THREE.Mesh(
+        new THREE.SphereBufferGeometry( 5, 16, 8 ),
+        new THREE.MeshBasicMaterial( { color: 0x0000ff, wireframe: true } )
+    );
+    mesh3.position.z = 150;
+    cameraRig.add( mesh3 );*/
+                                                
     this.camera.position.x = 0;
     this.camera.position.y = 0;
-    this.camera.position.z = 10;
+    this.camera.position.z = 100;
     this.camera.rotation.x = 0;
     this.camera.rotation.y = 0;
     this.camera.rotation.z = 0;
@@ -28,7 +46,8 @@ game.on('init',function(){
         'D': 'right',
         '<space>':'jump',
         '<mouse 1>': 'fire'});
-
+    var gui = new dat.GUI();
+    gui.add(cube.position,'x',-10,10);
     console.log('run...');
 });
 
