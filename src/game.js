@@ -71,7 +71,7 @@ Game.prototype.run=function(){
     this.emit('init');
     //如果用户没提供控制镜头的对象，这里创建默认的
     if(!this.observer){
-        //this.observer = new Observer(this);        
+        this.observer = new Observer(this);        
     }
     var t = Date.now()-1;
     var animate = function(){
