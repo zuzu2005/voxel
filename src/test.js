@@ -1,13 +1,24 @@
 var Game = require("./game");
 var kb = require("kb-controls");
+require("whatwg-fetch");
+
+var voxparser = require("./vox").Parser;
 
 var game = new Game({enableStats:true});
 
-var cube;
+fetch('vox/3x3x3.vox').then(function(response){
+    return response.arrayBuffer();
+}).then(function(req){
+    var vox = voxparser(req);
+    console.log(vox);
+}).catch(function(err){
+    console.log(err);
+});
+
 game.on('init',function(){
     var geometry = new THREE.BoxGeometry( 10, 10, 1 );
     var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
-    cube = new THREE.Mesh( geometry, material );
+    var cube = new THREE.Mesh( geometry, material );
     this.scene.add( cube );
 
     var mesh = new THREE.Mesh(
