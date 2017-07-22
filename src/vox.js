@@ -121,9 +121,25 @@ Object.assign(Vox.prototype,{
         return [this.modules[i].size_x,this.modules[i].size_y,this.modules[i].size_z];
     },
 
+    getVolume : function(i){
+        var module = this.modules[i];
+        var volume = new Uint8Array(module.size_x*module.size_y*module.size_z);
+        volume.fill(0);
+        var plane = module.size_x*module.size_y;
+        var line = module.size_y;
+        for(let i = 0;i < module.xyzi.length;i++){
+            let xyzi = module.xyzi[i];
+            let x = xyzi&0xff;
+            let y = (xyzi&0xff00)>>8;
+            let z = (xyzi&0xff0000)>>16;
+            let idx = (xyzi&0xff000000)>>24;
+            volume[z * plane + y * line + x] = idx;
+        }
+        return volume;
+    },
+
     getModelMesh : function(i){
         if(!THREE)throw 'You must import three.js';
-
     }
 });
 

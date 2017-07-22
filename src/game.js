@@ -6,7 +6,7 @@ var inherits = require("inherits");
 var Observer = require("./observer");
 
 module.exports = Game;
-
+var SHADOW_MAP_WIDTH = 2048, SHADOW_MAP_HEIGHT = 1024;
 /**
  * 构造函数
  * @param {*} opts 
@@ -14,6 +14,8 @@ module.exports = Game;
  * width,height : 固定的宽高，如果不提供
  * maxFrameSize : 最大的帧尺寸，帧尺寸指的是渲染真的尺寸，过大的尺寸导致低帧率
  * enableStats  : 打开帧率检测小窗口
+ * enableLight  : 打开默认灯
+ * enableShaodw : 打开阴影
  */
 function Game(opts){
     this.opts = opts || {};
@@ -37,12 +39,47 @@ function Game(opts){
             this.setSize(window.innerWidth,window.innerHeight);
         }.bind(this);
     }
-    this.camera = new THREE.PerspectiveCamera( 75, width / height, 0.1, 1000 );
+    this.camera = new THREE.PerspectiveCamera( 30, width / height, 0.1, 1000 );
     this.setSize(width,height);
     //这里加入帧率检测
     if(this.opts.enableStats){
         this.stats = new Stats();
         document.body.appendChild( this.stats.dom );
+    }
+    //初始化灯
+    if(this.opts&&opts.enableLight){
+        this.ambient = new THREE.AmbientLight( 0x444444 );
+        this.scene.add(this.ambient);
+        //打开阴影
+        var light = new THREE.SpotLight( 0xffffff, 1, 0, Math.PI / 2 );
+        this.light = light;
+        light.position.set( 0, 1500, 1000 );
+        light.target.position.set( 0, 0, 0 );
+        light.castShadow = true;
+        light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 1200, 2500 ) );
+        light.shadow.bias = 0.0001;
+        light.shadow.mapSize.width = SHADOW_MAP_WIDTH;
+        light.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
+        this.scene.add( light );
+    }
+    //打开阴影
+    if(this.opts&&opts.enableShaodw){
+        var SCREEN_HEIGHT = width;
+        var SHADOW_MAP_HEIGHT = height;
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.autoClear = false;
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFShadowMap;
+                        
+        this.renderer.shadowMap.type = THREE.PCFShadowMap;
+        var lightShadowMapViewer;
+        lightShadowMapViewer = new THREE.ShadowMapViewer( this.light );
+        lightShadowMapViewer.position.x = 10;
+        lightShadowMapViewer.position.y = SCREEN_HEIGHT - ( SHADOW_MAP_HEIGHT / 4 ) - 10;
+        lightShadowMapViewer.size.width = SHADOW_MAP_WIDTH / 4;
+        lightShadowMapViewer.size.height = SHADOW_MAP_HEIGHT / 4;
+        lightShadowMapViewer.update();
+        this.lightShadowMapViewer = lightShadowMapViewer;
     }
 }
 
@@ -81,6 +118,9 @@ Game.prototype.run=function(){
         if(!this.paused){
             this.emit('update',nt - t);
             this.renderer.render( this.scene, this.camera );
+            if(this.lightShadowMapViewer){
+                this.lightShadowMapViewer.render(this.renderer);
+            }
         }
         t = nt;
     }.bind(this);

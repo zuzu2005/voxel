@@ -31,6 +31,7 @@
     "kb-controls": "^0.2.0",
     "text-encoding": "^0.6.4",
     "three": "^0.86.0",
+    "voxel": "^0.5.0",
     "whatwg-fetch": "^2.0.3"
   }
 }
