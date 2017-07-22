@@ -112,6 +112,21 @@ function Vox(version){
     this.pals = [];
 }
 
+Object.assign(Vox.prototype,{
+    getModelNum : function(){
+        return this.modules.length;
+    },
+
+    getModelSize : function(i){
+        return [this.modules[i].size_x,this.modules[i].size_y,this.modules[i].size_z];
+    },
+
+    getModelMesh : function(i){
+        if(!THREE)throw 'You must import three.js';
+
+    }
+});
+
 var default_pals = [
     0x00000000, 0xffffffff, 0xffccffff, 0xff99ffff, 0xff66ffff, 0xff33ffff, 0xff00ffff, 0xffffccff, 0xffccccff, 0xff99ccff, 0xff66ccff, 0xff33ccff, 0xff00ccff, 0xffff99ff, 0xffcc99ff, 0xff9999ff,
 	0xff6699ff, 0xff3399ff, 0xff0099ff, 0xffff66ff, 0xffcc66ff, 0xff9966ff, 0xff6666ff, 0xff3366ff, 0xff0066ff, 0xffff33ff, 0xffcc33ff, 0xff9933ff, 0xff6633ff, 0xff3333ff, 0xff0033ff, 0xffff00ff,

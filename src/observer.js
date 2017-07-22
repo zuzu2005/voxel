@@ -34,7 +34,7 @@ function Observer(game){
     this.pos = game.camera.position;
     this.euler = game.camera.rotation;
     this.euler.order = 'ZXY';
-    var STEP = 1;
+    var STEP = (1)/10;
     /**
      * 根据当前状态更新摄像机
      */
@@ -85,7 +85,7 @@ Observer.prototype.onControlOptOut = function() {
 
 Observer.prototype.createWriteRotationStream = function(){
     var stream = new Stream();
-    var M = Math.PI/1800;
+    var M = (Math.PI/180)/30;
     stream.write = write.bind(this);
     stream.end = end.bind(this);
     stream.writable = true;
