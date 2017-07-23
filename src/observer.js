@@ -12,10 +12,10 @@ function Observer(game){
     // 初始化输入
     this.game = game;
     this.kb = kb({
-        '<left>': 'strafe_left',
-        '<right>': 'strafe_right',
-        '<up>': 'forward',
-        '<down>': 'backward',
+        '<left>': 'cam_left',
+        '<right>': 'cam_right',
+        '<up>': 'cam_up',
+        '<down>': 'cam_down',
         'W': 'forward',
         'A': 'left',
         'S': 'backward',
@@ -34,7 +34,8 @@ function Observer(game){
     this.pos = game.camera.position;
     this.euler = game.camera.rotation;
     this.euler.order = 'ZXY';
-    var STEP = (1)/10;
+    var STEP = (1)/1;
+    var M = (Math.PI/180);
     /**
      * 根据当前状态更新摄像机
      */
@@ -58,6 +59,18 @@ function Observer(game){
         if(k.jump){
             zstep = STEP;
         }
+        if(k.cam_left){
+            this.euler.z += M;
+        }
+        if(k.cam_right){
+            this.euler.z -= M;
+        }
+        if(k.cam_up){
+            this.euler.x += M;
+        }
+        if(k.cam_down){
+            this.euler.x -= M;
+        }
         var xyStep = step*Math.sin(this.euler.x);
         this.pos.x -= xyStep*Math.sin(this.euler.z);
         this.pos.y += xyStep*Math.cos(this.euler.z);
@@ -67,6 +80,9 @@ function Observer(game){
         this.pos.y -= xstep*Math.cos(this.euler.z+Math.PI/2);
         //向上
         this.pos.z += zstep;
+
+        this.euler.x = Math.min(this.euler.x,Math.PI);
+        this.euler.x = Math.max(this.euler.x,0);
     }).bind(this));
 }
 

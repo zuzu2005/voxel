@@ -6,7 +6,7 @@ var inherits = require("inherits");
 var Observer = require("./observer");
 
 module.exports = Game;
-var SHADOW_MAP_WIDTH = 2048, SHADOW_MAP_HEIGHT = 1024;
+
 /**
  * 构造函数
  * @param {*} opts 
@@ -49,37 +49,24 @@ function Game(opts){
     //初始化灯
     if(this.opts&&opts.enableLight){
         this.ambient = new THREE.AmbientLight( 0x444444 );
-        this.scene.add(this.ambient);
-        //打开阴影
+        this.scene.add(this.ambient);    
         var light = new THREE.SpotLight( 0xffffff, 1, 0, Math.PI / 2 );
         this.light = light;
-        light.position.set( 0, 1500, 1000 );
+        light.position.set( 150, 150, 200 );
         light.target.position.set( 0, 0, 0 );
         light.castShadow = true;
-        light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 1200, 2500 ) );
+        light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 120, 2500 ) );
         light.shadow.bias = 0.0001;
-        light.shadow.mapSize.width = SHADOW_MAP_WIDTH;
-        light.shadow.mapSize.height = SHADOW_MAP_HEIGHT;
+        light.shadow.mapSize.width = opts.SHADOW_MAP_WIDTH || 1024;
+        light.shadow.mapSize.height = opts.SHADOW_MAP_HEIGHT || 1024;
         this.scene.add( light );
     }
     //打开阴影
     if(this.opts&&opts.enableShaodw){
-        var SCREEN_HEIGHT = width;
-        var SHADOW_MAP_HEIGHT = height;
         this.renderer.shadowMap.enabled = true;
         this.renderer.autoClear = false;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFShadowMap;
-                        
-        this.renderer.shadowMap.type = THREE.PCFShadowMap;
-        var lightShadowMapViewer;
-        lightShadowMapViewer = new THREE.ShadowMapViewer( this.light );
-        lightShadowMapViewer.position.x = 10;
-        lightShadowMapViewer.position.y = SCREEN_HEIGHT - ( SHADOW_MAP_HEIGHT / 4 ) - 10;
-        lightShadowMapViewer.size.width = SHADOW_MAP_WIDTH / 4;
-        lightShadowMapViewer.size.height = SHADOW_MAP_HEIGHT / 4;
-        lightShadowMapViewer.update();
-        this.lightShadowMapViewer = lightShadowMapViewer;
     }
 }
 
