@@ -21,9 +21,9 @@ function Game(opts){
     this.opts = opts || {};
     this.scene = new THREE.Scene();    
     if(this.opts.canvas){
-        this.renderer = new THREE.WebGLRenderer({canvas:opts.canvas});
+        this.renderer = new THREE.WebGLRenderer({canvas:opts.canvas,antialias:this.opts.enableAA});
     }else{
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({antialias:this.opts.enableAA});
         document.body.appendChild( this.renderer.domElement );
     }
     //如果指定了尺寸就是用，否则和屏幕尺寸保持一致
@@ -46,28 +46,29 @@ function Game(opts){
         this.stats = new Stats();
         document.body.appendChild( this.stats.dom );
     }
-    //初始化灯
+    //初始化灯和阴影
     if(this.opts&&opts.enableLight){
         this.ambient = new THREE.AmbientLight( 0x444444 );
         this.scene.add(this.ambient);    
         var light = new THREE.SpotLight( 0xffffff, 1, 0, Math.PI / 2 );
         this.light = light;
-        light.position.set( 150, 150, 200 );
+        light.position.set( 0,0, 300 );
         light.target.position.set( 0, 0, 0 );
-        light.castShadow = true;
-        light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 120, 2500 ) );
-        light.shadow.bias = 0.0001;
-        light.shadow.mapSize.width = opts.SHADOW_MAP_WIDTH || 1024;
-        light.shadow.mapSize.height = opts.SHADOW_MAP_HEIGHT || 1024;
+        if(opts.enableShaodw){
+            light.castShadow = true;
+            light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 120, 2500 ) );
+            light.shadow.bias = 0.0001;
+            light.shadow.mapSize.width = opts.SHADOW_MAP_WIDTH || 1024;
+            light.shadow.mapSize.height = opts.SHADOW_MAP_HEIGHT || 1024;
+
+            this.renderer.shadowMap.enabled = true;
+            this.renderer.autoClear = false;
+            this.renderer.shadowMap.enabled = true;
+            this.renderer.shadowMap.type = THREE.PCFShadowMap;
+        }
         this.scene.add( light );
     }
-    //打开阴影
-    if(this.opts&&opts.enableShaodw){
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.autoClear = false;
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFShadowMap;
-    }
+    //打开反走样
 }
 
 inherits(Game,EventEmitter);
@@ -105,9 +106,6 @@ Game.prototype.run=function(){
         if(!this.paused){
             this.emit('update',nt - t);
             this.renderer.render( this.scene, this.camera );
-            if(this.lightShadowMapViewer){
-                this.lightShadowMapViewer.render(this.renderer);
-            }
         }
         t = nt;
     }.bind(this);
@@ -126,4 +124,11 @@ Game.prototype.pause=function(){
  */
 Game.prototype.resume=function(){
     this.paused = false;
+}
+
+/**
+ * 重新配置
+ */
+Game.prototype.updateOptions=function(opts){
+
 }

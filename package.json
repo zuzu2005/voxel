@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "voxeljs",
   "version": "1.0.0",
   "description": "用来载入.vox并渲染的库",
@@ -34,33 +33,5 @@
     "three": "^0.86.0",
     "voxel": "^0.5.0",
     "whatwg-fetch": "^2.0.3"
-=======
-  "name": "voxel",
-  "description": "tools to work with voxel generation and chunking in javascript",
-  "version": "0.5.0",
-  "main": "index.js",
-  "dependencies": {
-    "inherits": "1.0.0",
-    "ndarray": "~1.0.5"
-  },
-  "repository": {
-    "type": "git",
-    "url": "http://github.com/maxogden/voxel.git"
-  },
-  "scripts": {
-    "test": "node test.js"
-  },
-  "author": {
-    "name": "Max Ogden",
-    "email": "max@maxogden.com"
-  },
-  "license": "MIT",
-  "engine": {
-    "node": ">=0.6.0"
-  },
-  "devDependencies": {
-    "microtime": "~0.3.3",
-    "tape": "0.2.2"
->>>>>>> 31d8e3063bf288225f01e842784881c7e4dd9f27
   }
 }

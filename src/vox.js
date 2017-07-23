@@ -1,5 +1,6 @@
 /**
  * parser vox format ArrayBuffer
+ * https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt
  */
 module.exports.Parser = VoxParser;
 
@@ -70,6 +71,16 @@ function VoxParser(vox){
     if(vox.pals.length == 0){
         vox.pals = default_pals;
     }
+    vox.palRGBA = [{r:0,g:0,b:0,a:0}];
+    for(let i = 0;i<255;i++){
+        var c = vox.pals[i];
+        vox.palRGBA.push({
+            r : (c&0xff)/256,
+            g : ((c&0xff00)>>8)/256,
+            b : ((c&0xff0000)>>16)/256,
+            a : ((c&0xff000000)>>24)/256,
+        });
+    }
     return vox;
 }
 
@@ -121,7 +132,7 @@ Object.assign(Vox.prototype,{
         return [this.modules[i].size_x,this.modules[i].size_y,this.modules[i].size_z];
     },
 
-    getVolume : function(i){
+    getModelVolume : function(i){
         var module = this.modules[i];
         var volume = new Uint8Array(module.size_x*module.size_y*module.size_z);
         volume.fill(0);
@@ -138,8 +149,13 @@ Object.assign(Vox.prototype,{
         return volume;
     },
 
+    getPalRGBA : function(i){
+        return this.palRGBA[i];
+    },
+
     getModelMesh : function(i){
         if(!THREE)throw 'You must import three.js';
+
     }
 });
 
